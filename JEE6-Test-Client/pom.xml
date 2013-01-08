@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.clb.jee.test</groupId>
+		<artifactId>JEE-Test-Parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../JEE-Test-Parent/.</relativePath>
+	</parent>
+
+	<artifactId>JEE6-Test-Client</artifactId>
+
+	<dependencies>
+		<!-- add the war, ejb-jar, sar and jar projects to bundle here -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>JEE-Test-Util</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>JEE6-Test-EJB</artifactId>
+			<version>${project.version}</version>
+			<type>ejb</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+			<version>${version.junit}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.as</groupId>
+			<artifactId>jboss-as-ejb-client-bom</artifactId>
+			<type>pom</type>
+			<version>7.1.2.Final</version>
+		</dependency>
+	</dependencies>
+
+</project>
