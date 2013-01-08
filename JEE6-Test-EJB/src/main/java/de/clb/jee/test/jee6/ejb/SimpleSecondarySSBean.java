@@ -45,7 +45,7 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
 			result.setException(e.getMessage());
 			e.printStackTrace();
 		}
-		result.setCaller(ctx.getCallerIdentity().getName());
+		result.setCaller(ctx.getCallerPrincipal().getName());
 		if(null != ctx.getUserTransaction()) {
 			result.setHasTransaction(true);
 			
@@ -106,7 +106,6 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
 		return result;
 	}
 
-	@Override
 	@PermitAll
 	public ContextDataType replyWithSetRollbackOnly() {
 		ContextDataType result = getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimplePrimarySSBBean", "replyWithSetRollbackOnly");

@@ -37,7 +37,7 @@ public @Stateless class SimplePrimarySSBean implements SimplePrimarySSBeanRemote
 			result.setException(e.getMessage());
 			e.printStackTrace();
 		}
-		result.setCaller(ctx.getCallerIdentity().getName());
+		result.setCaller(ctx.getCallerPrincipal().getName());
 		if(null != ctx.getUserTransaction()) {
 			result.setHasTransaction(true);
 			
@@ -98,7 +98,6 @@ public @Stateless class SimplePrimarySSBean implements SimplePrimarySSBeanRemote
 		return result;
 	}
 
-	@Override
 	@PermitAll
 	public CallSequenceType delegate2SecondaryReply() {
 		CallSequenceType result = new CallSequenceType();
@@ -117,7 +116,6 @@ public @Stateless class SimplePrimarySSBean implements SimplePrimarySSBeanRemote
 		return result;
 	}
 
-	@Override
 	@RolesAllowed({"userRole", "adminRole"})
 	public CallSequenceType delegate2SecuredSecondaryReply() {
 CallSequenceType result = new CallSequenceType();
@@ -136,7 +134,6 @@ CallSequenceType result = new CallSequenceType();
 		return result;
 	}
 
-	@Override
 	@PermitAll
 	public ContextDataType replyWithSetRollbackOnly() {
 		ContextDataType result = getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimplePrimarySSBBean", "replyWithSetRollbackOnly");
@@ -153,7 +150,6 @@ CallSequenceType result = new CallSequenceType();
 		return result;
 	}
 
-	@Override
 	@PermitAll
 	public CallSequenceType delegate2RemoteReply() {
 		CallSequenceType result = new CallSequenceType();
@@ -172,7 +168,6 @@ CallSequenceType result = new CallSequenceType();
 		return result;
 	}
 
-	@Override
 	@RolesAllowed({"userRole", "adminRole"})
 	public CallSequenceType delegate2SecuredRemoteReply() {
 		CallSequenceType result = new CallSequenceType();
