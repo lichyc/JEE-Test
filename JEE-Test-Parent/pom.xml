@@ -20,18 +20,18 @@
     <repository>
       <id>test-release-repository</id>
       <name>Test Release Repository</name>
-      <url>???/releases/</url>
+      <url>http://jenkins.coe.muc.redhat.com/nexus/content/repositories/releases/</url>
     </repository>
     <snapshotRepository>
       <id>test-snapshot-repository</id>
       <name>Test Snapshot Repository</name>
-      <url>???/snapshots/</url>
+      <url>http://jenkins.coe.muc.redhat.com/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
   
    <scm>
-    <connection>???</connection>
-    <developerConnection>???</developerConnection>
+    <connection>scm:git:https://github.com/lichyc/JEE-Test.git</connection>
+    <developerConnection>scm:git:https://github.com/lichyc/JEE-Test.git</developerConnection>
   </scm>
   
 </project>
