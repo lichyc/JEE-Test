@@ -10,6 +10,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
+import javax.transaction.SystemException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
@@ -102,6 +103,23 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
 			result.getException().add(e.getMessage());
 			e.printStackTrace();
 		}	
+		return result;
+	}
+
+	@Override
+	@PermitAll
+	public ContextDataType replyWithSetRollbackOnly() {
+		ContextDataType result = getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimplePrimarySSBBean", "replyWithSetRollbackOnly");
+		
+		try {
+			sessionContext.getUserTransaction().setRollbackOnly();
+		} catch (IllegalStateException e) {
+			result.setException(e.getMessage());
+			e.printStackTrace();
+		} catch (SystemException e) {
+			result.setException(e.getMessage());
+			e.printStackTrace();
+		}
 		return result;
 	}
 

@@ -36,12 +36,10 @@
 
 	<dependencyManagement>
 		<dependencies>
-
 			<dependency>
 				<groupId>org.jboss.spec</groupId>
 				<artifactId>jboss-javaee-6.0</artifactId>
-				<!-- version>${version.jboss-javaee-6.0.spec}</version -->
-				<version>3.0.0.Final-redhat-1</version>
+				<version>${version.jboss-javaee-6.0.spec}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

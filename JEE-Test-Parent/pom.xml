@@ -9,7 +9,12 @@
         <version.jboss.as>7.1.1.Final-redhat-1</version.jboss.as>
         <version.junit>4.8.2</version.junit>
         <version.jdk>1.6</version.jdk>
-        <version.jboss-javaee-6.0.spec>3.0.0.Final-redhat-1</version.jboss-javaee-6.0.spec>
+        <!-- EAP 6.0.1 
+		<version.jboss-javaee-6.0.spec>3.0.1.Final-redhat-1</version.jboss-javaee-6.0.spec>
+		-->
+		<!-- EAP 6.0.0 -->
+		<version.jboss-javaee-6.0.spec>3.0.0.Final-redhat-1</version.jboss-javaee-6.0.spec>
+		
         
         <!-- Maven Plugin Versions -->
         <version.maven-ear-plugin>2.7</version.maven-ear-plugin>
