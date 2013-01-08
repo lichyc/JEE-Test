@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.clb.jee.test</groupId>
+  <artifactId>JEE-Test-Parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+   <properties>
+        <version.jboss.as>7.1.1.Final-redhat-1</version.jboss.as>
+        <version.junit>4.8.2</version.junit>
+        <version.jdk>1.6</version.jdk>
+        <version.jboss-javaee-6.0.spec>3.0.0.Final-redhat-1</version.jboss-javaee-6.0.spec>
+        
+        <!-- Maven Plugin Versions -->
+        <version.maven-ear-plugin>2.7</version.maven-ear-plugin>
+
+    </properties>
+    
+    <distributionManagement>
+    <repository>
+      <id>test-release-repository</id>
+      <name>Test Release Repository</name>
+      <url>???/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>test-snapshot-repository</id>
+      <name>Test Snapshot Repository</name>
+      <url>???/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  
+   <scm>
+    <connection>???</connection>
+    <developerConnection>???</developerConnection>
+  </scm>
+  
+</project>

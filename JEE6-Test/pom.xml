@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+  	<groupId>de.clb.jee.test</groupId>
+  	<artifactId>JEE-Test-Parent</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>JEE6-Test</artifactId>
+ 
+  <packaging>ear</packaging>
+  
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>${version.maven-ear-plugin}</version>
+				<configuration>
+					<version>6</version><!-- Java EE 6 -->
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<modules>
+					</modules>
+					<earSourceDirectory>src/main/resources</earSourceDirectory>  
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>${version.jboss-javaee-6.0.spec}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<scope>test</scope>
+				<version>${version.junit}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- add the war, ejb-jar, sar and jar projects to bundle here  -->
+		<dependency>
+  			<groupId>de.clb.jee.test</groupId>
+  			<artifactId>JEE-Test-Util</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>de.clb.jee.test</groupId>
+  			<artifactId>JEE-Test-EJB</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+	</dependencies>
+</project>

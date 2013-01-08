@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/CallContextSchema" xmlns:tns="http://www.example.org/CallContextSchema" elementFormDefault="qualified">
+
+    <complexType name="ContextDataType">
+    	<sequence>
+    		<element name="Exception" type="tns:ExceptionType"></element>
+    	</sequence>
+    	<attribute name="Caller" type="string"></attribute>
+    	<attribute name="EJB-Name" type="string"></attribute>
+    	<attribute name="Operation" type="string"></attribute>
+    	<attribute name="hasTransaction" type="boolean"></attribute>
+    	<attribute name="CallTime" type="time"></attribute>
+    </complexType>
+
+    <complexType name="CallSequenceType">
+    	<sequence>
+    		<element ref="tns:ContextDataElement" maxOccurs="unbounded"
+    			minOccurs="0">
+    		</element>
+    		<element ref="tns:CallSequenceElement" maxOccurs="unbounded"
+    			minOccurs="0">
+    		</element>
+    		<element name="Exception" type="tns:ExceptionType" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="ContextDataElement" type="tns:ContextDataType"></element>
+    <element name="CallSequenceElement" type="tns:CallSequenceType"></element>
+
+    <simpleType name="ExceptionType">
+    	<restriction base="string"></restriction>
+    </simpleType>
+</schema>
