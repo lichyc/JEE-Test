@@ -7,14 +7,21 @@
   </parent>
   <artifactId>JEE6-Test-EJB</artifactId>
   
-  
   <dependencies>
   	<dependency>
   		<groupId>de.clb.jee.test</groupId>
   		<artifactId>JEE-Test-Util</artifactId>
   		<version>${project.version}</version>
   	</dependency>
-  
+  	
+  	<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>3.0.0.Final-redhat-1</version>
+				<type>pom</type>
+				<scope>provided</scope>			
+				</dependency> 
   </dependencies>
   
+  <packaging>ejb</packaging>
 </project>
