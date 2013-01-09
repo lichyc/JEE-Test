@@ -23,7 +23,7 @@ import de.clb.jee.test.util.GenericEJBClient;
 @LocalBean
 @DeclareRoles({"guestRole", "userRole", "adminRole"})
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
+public class SimpleSecondarySSBean extends BaseSSBean implements SimpleSecondarySSBeanRemote {
 	
 	@Resource
 	private SessionContext sessionContext;
@@ -34,41 +34,24 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
     public SimpleSecondarySSBean() {
         // TODO Auto-generated constructor stub
     }
-    
-    private ContextDataType getContextData(SessionContext ctx, String clazzName, String operationName) {
-		ContextDataType result = new ContextDataType();
-		
-		result.setCallTime(System.currentTimeMillis());
-		result.setCaller(ctx.getCallerPrincipal().getName());
-		if(null != ctx.getUserTransaction()) {
-			result.setHasTransaction(true);
-			
-		} else {
-			result.setHasTransaction(false);
-		}
-		result.setEJBName(clazzName);
-		result.setOperation(operationName);		
-		return result;
-		
-	}
 
 	@PermitAll
 	public ContextDataType simpleReply() {
 		
-		return getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBean", "simpleReply");
+		return getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleReply");
 	}
 
 	@RolesAllowed({"userRole", "adminRole"})
 	public ContextDataType simpleSecuredReply() {
 		
-		return getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBean", "simpleSecuredReply");
+		return getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleSecuredReply");
 	}
 
 	@PermitAll
 	public CallSequenceType simpleDelegate() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBean", "simpleDelegate"));
+		result.getContextDataElement().add(getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleDelegate"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
@@ -86,7 +69,7 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
 	public CallSequenceType simpleSecuredDelegate() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBean", "simpleSecuredDelegate"));
+		result.getContextDataElement().add(getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleSecuredDelegate"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
@@ -102,7 +85,7 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
 
 	@PermitAll
 	public ContextDataType replyWithSetRollbackOnly() {
-		ContextDataType result = getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimplePrimarySSBBean", "replyWithSetRollbackOnly");
+		ContextDataType result = getContextData(sessionContext, SimpleSecondarySSBean.class, "replyWithSetRollbackOnly");
 		
 		try {
 			sessionContext.getUserTransaction().setRollbackOnly();
