@@ -83,7 +83,7 @@ public class SSBeanClientTest {
 			}
 		}
 
-		// Display results
+		// Display results of all calls.
 		for (EJBCallResult callResult : results) {
 			System.out.println(callResult);
 			System.out.println(callResult.bean.jndiName);
