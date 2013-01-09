@@ -1,26 +1,38 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.clb.jee.test</groupId>
   <artifactId>JEE-Test-Parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  
+
    <properties>
-        <version.jboss.as>7.1.1.Final-redhat-1</version.jboss.as>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <version.junit>4.8.2</version.junit>
         <version.jdk>1.6</version.jdk>
-        <!-- EAP 6.0.1 
+
+		<!-- EAP 6.0.1 -->
+		<!-- 		
 		<version.jboss-javaee-6.0.spec>3.0.1.Final-redhat-1</version.jboss-javaee-6.0.spec>
+        <version.jboss.as>7.1.2.Final-redhat-1</version.jboss.as>
+        <version.jbosgi-vfs30>1.1.0.Final-redhat-2</version.jbosgi-vfs30>
+        <version.interceptors-api_1.1_spec>1.0.1.Final-redhat-2</version.interceptors-api_1.1_spec>
 		-->
-		<!-- EAP 6.0.0 -->
-		<version.jboss-javaee-6.0.spec>3.0.0.Final-redhat-1</version.jboss-javaee-6.0.spec>
 		
-        
-        <!-- Maven Plugin Versions -->
-        <version.maven-ear-plugin>2.7</version.maven-ear-plugin>
+		<!-- EAP 6.0.0 -->
+		<!--		-->
+		<version.jboss-javaee-6.0.spec>3.0.0.Final-redhat-1</version.jboss-javaee-6.0.spec>
+		<version.jboss.as>7.1.1.Final-redhat-1</version.jboss.as>
+        <version.jbosgi-vfs30>1.0.7.Final-redhat-1</version.jbosgi-vfs30>
+        <version.interceptors-api_1.1_spec>1.0.0.Final-redhat-1</version.interceptors-api_1.1_spec>
+
+
+		<!-- Maven Plugin Versions -->
+		<version.maven-ear-plugin>2.7</version.maven-ear-plugin>
 
     </properties>
-    
+
     <distributionManagement>
     <repository>
       <id>test-release-repository</id>
@@ -38,5 +50,5 @@
     <connection>scm:git:https://github.com/lichyc/JEE-Test.git</connection>
     <developerConnection>scm:git:https://github.com/lichyc/JEE-Test.git</developerConnection>
   </scm>
-  
+
 </project>
