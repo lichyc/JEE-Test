@@ -56,6 +56,7 @@ public class SSBeanClientTest {
 		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		p.put("jboss.naming.client.ejb.context", "true");
 
+		// Initializes a result set.
 		final List<EJBCallResult> results = new ArrayList<EJBCallResult>();
 
 		// Iterates on all EJBs.
@@ -64,7 +65,6 @@ public class SSBeanClientTest {
 			// Iterates on all public methods.
 			for (Method method : ssBean31.interfaceClass.getMethods()) {
 
-				// Initializes a result set.
 				EJBCallResult result = new EJBCallResult(ssBean31, method.getName());
 				results.add(result);
 				try {
@@ -73,12 +73,12 @@ public class SSBeanClientTest {
 					Object sb = lookupRemoteStatelessSSB31(p, ssBean31.jndiName);
 					// Method invocation
 					result.setResult(method.invoke(sb, (Object[]) null));
-
 				} catch (Exception e) {
 					result.setE(e);
-					if (stopsAfterFirstException) {
-						break loop;
-					}
+				}
+
+				if (this.stopsAfterFirstException && !result.isSuccessful()) {
+					break loop;
 				}
 			}
 		}
