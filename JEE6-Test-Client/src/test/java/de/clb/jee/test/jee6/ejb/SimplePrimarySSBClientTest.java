@@ -1,6 +1,8 @@
 package de.clb.jee.test.jee6.ejb;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -16,6 +18,8 @@ import org.junit.Test;
  * 
  */
 public class SimplePrimarySSBClientTest {
+
+	final boolean stopsAfterFirstException = true;
 
 	@Test
 	public void callSimplePrimarySSB() {
@@ -45,28 +49,36 @@ public class SimplePrimarySSBClientTest {
 		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		p.put("jboss.naming.client.ejb.context", "true");
 
-		outerloop:
-		for (SSBean31 ssBean31 : SSBean31.values()) {
+		final List<EJBCallResult> results = new ArrayList<EJBCallResult>();
 
-			System.out.println("SSB " + ssBean31);
+		// Iterates on all EJBs.
+		loop: for (SSBean31 ssBean31 : SSBean31.values()) {
 
-			try {
-				Object sb = lookupRemoteStatelessSSB31(p, ssBean31.jndiName);
-				for (Method method : ssBean31.interfaceClass.getMethods()) {
+			// Iterates on all public methods.
+			for (Method method : ssBean31.interfaceClass.getMethods()) {
 
-					try {
-						System.out.println("Invoking " + ssBean31.interfaceClass.getName() + "." + method.getName() + "()");
-						method.invoke(sb, (Object[]) null);
-					} catch (Exception e) {
-						e.printStackTrace();
-						break outerloop;
+				// Initializes a result set.
+				EJBCallResult result = new EJBCallResult(ssBean31, method.getName());
+				results.add(result);
+				try {
+
+					// EJB lookup
+					Object sb = lookupRemoteStatelessSSB31(p, ssBean31.jndiName);
+					// Method invocation
+					method.invoke(sb, (Object[]) null);
+
+				} catch (Exception e) {
+					result.setE(e);
+					if (stopsAfterFirstException) {
+						break loop;
 					}
 				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				break outerloop;
 			}
+		}
+
+		// Display results
+		for (EJBCallResult result : results) {
+			System.out.println(result);
 		}
 
 	}
