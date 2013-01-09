@@ -82,6 +82,7 @@ public class SSBeanClientTest {
 		// Display results
 		for (EJBCallResult result : results) {
 			System.out.println(result);
+			System.out.println(result.bean.jndiName);
 		}
 
 	}
@@ -95,10 +96,7 @@ public class SSBeanClientTest {
 	 * @throws NamingException
 	 */
 	public static Object lookupRemoteStatelessSSB31(Properties properties, String name) throws NamingException {
-		// jndiProperties.put("remote.connection.default.host", "127.0.0.1");
-		final Context context = new InitialContext(properties);
-		// let's do the lookup
-		return context.lookup(name);
+		return new InitialContext(properties).lookup(name);
 	}
 
 }
