@@ -45,6 +45,7 @@ public class SimplePrimarySSBClientTest {
 		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		p.put("jboss.naming.client.ejb.context", "true");
 
+		outerloop:
 		for (SSBean31 ssBean31 : SSBean31.values()) {
 
 			System.out.println("SSB " + ssBean31);
@@ -58,11 +59,13 @@ public class SimplePrimarySSBClientTest {
 						method.invoke(sb, (Object[]) null);
 					} catch (Exception e) {
 						e.printStackTrace();
+						break outerloop;
 					}
 				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				break outerloop;
 			}
 		}
 
