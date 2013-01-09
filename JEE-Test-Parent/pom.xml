@@ -13,20 +13,20 @@
         <version.jdk>1.6</version.jdk>
 
 		<!-- EAP 6.0.1 -->
-		<!-- 		
+			
 		<version.jboss-javaee-6.0.spec>3.0.1.Final-redhat-1</version.jboss-javaee-6.0.spec>
         <version.jboss.as>7.1.2.Final-redhat-1</version.jboss.as>
         <version.jbosgi-vfs30>1.1.0.Final-redhat-2</version.jbosgi-vfs30>
         <version.interceptors-api_1.1_spec>1.0.1.Final-redhat-2</version.interceptors-api_1.1_spec>
-		-->
+		<!-- 	-->
 		
 		<!-- EAP 6.0.0 -->
-		<!--		-->
+		<!--		
 		<version.jboss-javaee-6.0.spec>3.0.0.Final-redhat-1</version.jboss-javaee-6.0.spec>
 		<version.jboss.as>7.1.1.Final-redhat-1</version.jboss.as>
         <version.jbosgi-vfs30>1.0.7.Final-redhat-1</version.jbosgi-vfs30>
         <version.interceptors-api_1.1_spec>1.0.0.Final-redhat-1</version.interceptors-api_1.1_spec>
-
+-->
 
 		<!-- Maven Plugin Versions -->
 		<version.maven-ear-plugin>2.7</version.maven-ear-plugin>
