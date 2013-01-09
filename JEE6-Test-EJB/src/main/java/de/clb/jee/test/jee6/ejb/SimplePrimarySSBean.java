@@ -1,17 +1,15 @@
 package de.clb.jee.test.jee6.ejb;
 
-import java.util.GregorianCalendar;
-
 import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.naming.NamingException;
 import javax.transaction.SystemException;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 
 import de.clb.jee.test.util.CallSequenceType;
 import de.clb.jee.test.util.ContextDataType;
@@ -19,6 +17,7 @@ import de.clb.jee.test.util.GenericEJBClient;
 
 //@SecurityDomain("mySecurityDomain")
 @DeclareRoles({"guestRole", "userRole", "adminRole"})
+@TransactionManagement(TransactionManagementType.BEAN)
 public @Stateless class SimplePrimarySSBean implements SimplePrimarySSBeanRemote {
 	
 	public static final String REMOTE_EAP6_SERVER_ID = "partnerEAP6";
@@ -27,16 +26,10 @@ public @Stateless class SimplePrimarySSBean implements SimplePrimarySSBeanRemote
 	@Resource
 	private SessionContext sessionContext;
 	
-	
 	private ContextDataType getContextData(SessionContext ctx, String clazzName, String operationName) {
 		ContextDataType result = new ContextDataType();
 		
-		try {
-			result.setCallTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
-		} catch (DatatypeConfigurationException e) {
-			result.setException(e.getMessage());
-			e.printStackTrace();
-		}
+		result.setCallTime(System.currentTimeMillis());
 		result.setCaller(ctx.getCallerPrincipal().getName());
 		if(null != ctx.getUserTransaction()) {
 			result.setHasTransaction(true);
