@@ -12,13 +12,16 @@ import javax.naming.NamingException;
 import org.junit.Test;
 
 /**
- * t
  * 
  * @author mzottner
  * 
  */
-public class SimplePrimarySSBClientTest {
+public class SSBeanClientTest {
 
+	/**
+	 * True if the tests should be interrupted after the first exception
+	 * occuring.
+	 */
 	final boolean stopsAfterFirstException = true;
 
 	@Test
