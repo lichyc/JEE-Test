@@ -9,7 +9,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Test;
+
+import de.clb.jee.test.util.CallSequenceType;
 
 /**
  * 
@@ -68,7 +72,7 @@ public class SSBeanClientTest {
 					// EJB lookup
 					Object sb = lookupRemoteStatelessSSB31(p, ssBean31.jndiName);
 					// Method invocation
-					method.invoke(sb, (Object[]) null);
+					result.setResult(method.invoke(sb, (Object[]) null));
 
 				} catch (Exception e) {
 					result.setE(e);
@@ -80,9 +84,21 @@ public class SSBeanClientTest {
 		}
 
 		// Display results
-		for (EJBCallResult result : results) {
-			System.out.println(result);
-			System.out.println(result.bean.jndiName);
+		for (EJBCallResult callResult : results) {
+			System.out.println(callResult);
+			System.out.println(callResult.bean.jndiName);
+			Object res = callResult.getResult();
+			if (res != null) {
+				// Show the content of the result
+				if (res instanceof CallSequenceType) {
+					CallSequenceType cst = (CallSequenceType) res;
+					System.out.println(ToStringBuilder.reflectionToString(cst.getCallSequenceElement(), ToStringStyle.MULTI_LINE_STYLE, true, Object.class));
+					System.out.println(ToStringBuilder.reflectionToString(cst.getContextDataElement(), ToStringStyle.MULTI_LINE_STYLE, true, Object.class));
+				} else {
+					System.out.println(ToStringBuilder.reflectionToString(res, ToStringStyle.MULTI_LINE_STYLE, true, Object.class));
+				}
+
+			}
 		}
 
 	}
