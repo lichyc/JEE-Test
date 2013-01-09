@@ -71,7 +71,7 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
 		result.getContextDataElement().add(getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBean", "simpleDelegate"));
 		
 		try {
-			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleReply());
@@ -89,7 +89,7 @@ public class SimpleSecondarySSBean implements SimpleSecondarySSBeanRemote {
 		result.getContextDataElement().add(getContextData(sessionContext, "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBean", "simpleSecuredDelegate"));
 		
 		try {
-			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());
