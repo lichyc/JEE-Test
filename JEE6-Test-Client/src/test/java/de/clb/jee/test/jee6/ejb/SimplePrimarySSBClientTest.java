@@ -1,13 +1,16 @@
 package de.clb.jee.test.jee6.ejb;
 
-import javax.naming.Context;
+import java.lang.reflect.Method;
+import java.util.Properties;
 
-import org.junit.Assert;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.junit.Test;
 
-import de.clb.jee.test.util.GenericEJBClient;
-
 /**
+ * t
  * 
  * @author mzottner
  * 
@@ -17,30 +20,67 @@ public class SimplePrimarySSBClientTest {
 	@Test
 	public void callSimplePrimarySSB() {
 
-		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
-		System.setProperty(Context.PROVIDER_URL, "remote://localhost:4447");
-		System.setProperty(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-		System.setProperty("jboss.naming.client.ejb.context", "true");
+		Properties p = new Properties();
+		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		p.put(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
+		p.put("remote.connection.default.host", "127.0.0.1");
+		p.put("remote.connection.default.port", "4447");
+		p.put("remote.connections", "default");
 
-		// env.put( "jboss.naming.client.ejb.context", true );
-		// env.put( Context.SECURITY_PRINCIPAL, USER );
-		// env.put( Context.SECURITY_CREDENTIALS, PASS );
+		// p.put("remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOANONYMOUS",
+		// "false");
+		// p.put("remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED",
+		// "false");
+		// p.put("remote.connection.default.connect.options.org.xnio.Options.SASL_DISALLOWED_MECHANISMS",
+		// "JBOSS-LOCAL-USER");
+		// p.put("remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT",
+		// "false");
+		// p.put("remote.connection.default.connect.options.org.xnio.Options.SSL_STARTTLS",
+		// "true");
 
-		try {
-			SimplePrimarySSBeanRemote spSB = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("primaryEAP6", "JEE6-Test", "JEE6-Test-EJB", "", "SimplePrimarySSBean",
-					"de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
+		// p.put("remote.connection.default.username", username);
+		// p.put("remote.connection.default.password", password);
 
-			System.out.println("simpleReply");
-			spSB.simpleReply();
+		p.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
+		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		p.put("jboss.naming.client.ejb.context", "true");
 
-			System.out.println("simpleDelegate");
-			spSB.simpleDelegate();
+		for (SSBean31 ssBean31 : SSBean31.values()) {
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.assertNull(e);
+			System.out.println("SSB " + ssBean31);
+
+			try {
+				Object sb = lookupRemoteStatelessSSB31(p, ssBean31.jndiName);
+				for (Method method : ssBean31.interfaceClass.getMethods()) {
+
+					try {
+						System.out.println("Invoking " + ssBean31.interfaceClass.getName() + "." + method.getName() + "()");
+						method.invoke(sb, (Object[]) null);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
+	}
+
+	/**
+	 * Looks up and returns the proxy to remote stateless EJB.
+	 * 
+	 * @param name
+	 *            The full JNDI name to lookup.
+	 * @return
+	 * @throws NamingException
+	 */
+	public static Object lookupRemoteStatelessSSB31(Properties properties, String name) throws NamingException {
+		// jndiProperties.put("remote.connection.default.host", "127.0.0.1");
+		final Context context = new InitialContext(properties);
+		// let's do the lookup
+		return context.lookup(name);
 	}
 
 }
