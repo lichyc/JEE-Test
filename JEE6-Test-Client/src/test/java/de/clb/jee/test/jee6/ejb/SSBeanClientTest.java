@@ -16,17 +16,17 @@ import org.junit.Test;
 import de.clb.jee.test.util.CallSequenceType;
 
 /**
- * 
+ * This class calls all methods of all listed EJB 3.1.
+ *  
  * @author mzottner
  * 
  */
 public class SSBeanClientTest {
 
 	/**
-	 * True if the tests should be interrupted after the first exception
-	 * occuring.
+	 * True if the tests should be interrupted after the first exception occurring.
 	 */
-	final boolean stopsAfterFirstException = true;
+	protected boolean stopsAfterFirstException = false;
 
 	@Test
 	public void callSimplePrimarySSB() {
@@ -49,8 +49,8 @@ public class SSBeanClientTest {
 		// p.put("remote.connection.default.connect.options.org.xnio.Options.SSL_STARTTLS",
 		// "true");
 
-		// p.put("remote.connection.default.username", username);
-		// p.put("remote.connection.default.password", password);
+		// p.put("remote.connection.default.username", "username");
+		// p.put("remote.connection.default.password", "password");
 
 		p.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
 		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");

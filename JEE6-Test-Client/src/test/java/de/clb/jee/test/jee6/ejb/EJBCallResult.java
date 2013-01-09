@@ -54,10 +54,9 @@ public class EJBCallResult implements Serializable {
 		return result;
 	}
 
-	public SSBean31 getBean() {
-		return this.bean;
-	}
-
+	/**
+	 * @return true when the EJB call has been successful.
+	 */
 	public boolean isSuccessful() {
 
 		boolean notNull = this.e == null && this.result != null;
@@ -66,6 +65,10 @@ public class EJBCallResult implements Serializable {
 			notCdtException = StringUtils.isEmpty(((ContextDataType) result).getException());
 		}
 		return notNull && notCdtException;
+	}
+
+	public SSBean31 getBean() {
+		return this.bean;
 	}
 
 	public Exception getE() {
