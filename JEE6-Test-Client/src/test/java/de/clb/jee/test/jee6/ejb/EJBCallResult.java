@@ -45,14 +45,13 @@ public class EJBCallResult implements Serializable {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		String result = isSuccessful() ? "SUCCESS" : "FAILURE";
+		String result = "\n============ " + (isSuccessful() ? "SUCCESS" : "FAILURE") + " ============> " + bean.interfaceClass.getSimpleName() + "." + method + "()\n";
 		if (e != null) {
 			Writer writer = new StringWriter();
 			e.printStackTrace(new PrintWriter(writer));
 			result += writer.toString();
 		}
-		return "\n============ " + result + " ============> " + bean.interfaceClass.getSimpleName() + "." + method + "()\n";
+		return result;
 	}
 
 	public SSBean31 getBean() {
