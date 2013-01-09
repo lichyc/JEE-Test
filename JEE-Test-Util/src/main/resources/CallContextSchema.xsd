@@ -9,6 +9,7 @@
     	<attribute name="EJB-Name" type="string"></attribute>
     	<attribute name="Operation" type="string"></attribute>
     	<attribute name="hasTransaction" type="boolean"></attribute>
+    	<attribute name="TransactionStatus" type="int"></attribute>
     	<attribute name="CallTime" type="long"></attribute>
     </complexType>
 
