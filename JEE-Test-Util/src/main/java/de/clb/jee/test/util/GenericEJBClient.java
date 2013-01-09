@@ -4,6 +4,7 @@
 package de.clb.jee.test.util;
 
 import java.util.Hashtable;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,6 +15,8 @@ import javax.naming.NamingException;
  *
  */
 public class GenericEJBClient {
+	
+	static Logger log = Logger.getLogger("GenericEJBClient") ;
 	
 	/**
      * Looks up and returns the proxy to remote stateless EJB
@@ -65,20 +68,26 @@ public class GenericEJBClient {
         
         PropertiesManager pm = PropertiesManager.getInstance("de.clb.jee.test");
         
+        pm.printInMemoryProperties();
+        
         String providerURL = pm.getProperty("remote.connection."+serverId+".provider.url");
         String securityPrincipal = pm.getProperty("remote.connection."+serverId+".security.principal");
         String securityCredential = pm.getProperty("remote.connection."+serverId+".security.credential");
         
         jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
         
         if (null != providerURL) {
         	jndiProperties.put(Context.PROVIDER_URL, providerURL);
+        	log.info("PROVIDER_URL is use: " + providerURL);
         }
         if (null != securityPrincipal) {
         	jndiProperties.put(Context.SECURITY_PRINCIPAL, securityPrincipal);
+        	log.info("SECURITY_PRINCIPAL is use: " + securityPrincipal);
         }
         if (null != securityCredential) {
         	jndiProperties.put(Context.SECURITY_CREDENTIALS, securityCredential);
+        	log.info("SECURITY_CREDENTIALS is use: " + securityCredential);
         }
         	
         final Context context = new InitialContext(jndiProperties);

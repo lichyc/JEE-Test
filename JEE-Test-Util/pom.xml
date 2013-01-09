@@ -25,6 +25,10 @@
 				</executions>
 				<configuration>
 					<generatePackage>de.clb.jee.test.util</generatePackage>
+					<bindingDirectory>src/main/resources</bindingDirectory>
+      <bindingIncludes>
+      <bindingInclude>jaxb-bindings.xjb</bindingInclude>
+      </bindingIncludes>
 				</configuration>
 			</plugin>
 			<plugin>
