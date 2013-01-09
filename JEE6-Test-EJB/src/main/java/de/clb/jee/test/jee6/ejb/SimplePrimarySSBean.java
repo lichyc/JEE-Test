@@ -29,19 +29,19 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	@PermitAll
 	public ContextDataType simpleReply() {
 		
-		return getContextData(sessionContext, SimplePrimarySSBean.class, "simpleReply");
+		return getContextData(sessionContext, "simpleReply");
 	}
 
 	@RolesAllowed({"userRole", "adminRole"})
 	public ContextDataType simpleSecuredReply() {
 		
-		return getContextData(sessionContext, SimplePrimarySSBean.class, "simpleSecuredReply");
+		return getContextData(sessionContext, "simpleSecuredReply");
 	}
 
 	@PermitAll
 	public CallSequenceType simpleDelegate() {
 		CallSequenceType result = new CallSequenceType();
-		result.getContextDataElement().add(getContextData(sessionContext, SimplePrimarySSBean.class, "simpleDelegate"));
+		result.getContextDataElement().add(getContextData(sessionContext, "simpleDelegate"));
 		try {
 			//ejb:JEE6-Test/JEE6-Test-EJB//SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote
 			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
@@ -59,7 +59,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	public CallSequenceType simpleSecuredDelegate() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, SimplePrimarySSBean.class, "simpleSecuredDelegate"));
+		result.getContextDataElement().add(getContextData(sessionContext, "simpleSecuredDelegate"));
 		
 		try {
 			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
@@ -77,7 +77,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	public CallSequenceType delegate2SecondaryReply() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, SimplePrimarySSBean.class, "delegate2SecondaryReply"));
+		result.getContextDataElement().add(getContextData(sessionContext, "delegate2SecondaryReply"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
@@ -94,7 +94,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	@RolesAllowed({"userRole", "adminRole"})
 	public CallSequenceType delegate2SecuredSecondaryReply() {
 		CallSequenceType result = new CallSequenceType();
-		result.getContextDataElement().add(getContextData(sessionContext, SimplePrimarySSBean.class, "delegate2SecuredSecondaryReply"));
+		result.getContextDataElement().add(getContextData(sessionContext, "delegate2SecuredSecondaryReply"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
@@ -110,7 +110,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 
 	@PermitAll
 	public ContextDataType replyWithSetRollbackOnly() {
-		ContextDataType result = getContextData(sessionContext, SimplePrimarySSBean.class, "replyWithSetRollbackOnly");
+		ContextDataType result = getContextData(sessionContext, "replyWithSetRollbackOnly");
 		
 		try {
 			sessionContext.getUserTransaction().setRollbackOnly();
@@ -128,7 +128,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	public CallSequenceType delegate2RemoteReply() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, SimplePrimarySSBean.class, "delegate2RemoteReply"));
+		result.getContextDataElement().add(getContextData(sessionContext, "delegate2RemoteReply"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
@@ -146,7 +146,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	public CallSequenceType delegate2SecuredRemoteReply() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, SimplePrimarySSBean.class, "delegate2SecuredRemoteReply"));
+		result.getContextDataElement().add(getContextData(sessionContext, "delegate2SecuredRemoteReply"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");

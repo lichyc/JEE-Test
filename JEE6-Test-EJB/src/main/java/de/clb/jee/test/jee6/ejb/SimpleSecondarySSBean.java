@@ -38,20 +38,20 @@ public class SimpleSecondarySSBean extends BaseSSBean implements SimpleSecondary
 	@PermitAll
 	public ContextDataType simpleReply() {
 		
-		return getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleReply");
+		return getContextData(sessionContext, "simpleReply");
 	}
 
 	@RolesAllowed({"userRole", "adminRole"})
 	public ContextDataType simpleSecuredReply() {
 		
-		return getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleSecuredReply");
+		return getContextData(sessionContext, "simpleSecuredReply");
 	}
 
 	@PermitAll
 	public CallSequenceType simpleDelegate() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleDelegate"));
+		result.getContextDataElement().add(getContextData(sessionContext, "simpleDelegate"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
@@ -69,7 +69,7 @@ public class SimpleSecondarySSBean extends BaseSSBean implements SimpleSecondary
 	public CallSequenceType simpleSecuredDelegate() {
 		CallSequenceType result = new CallSequenceType();
 		
-		result.getContextDataElement().add(getContextData(sessionContext, SimpleSecondarySSBean.class, "simpleSecuredDelegate"));
+		result.getContextDataElement().add(getContextData(sessionContext, "simpleSecuredDelegate"));
 		
 		try {
 			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
@@ -85,7 +85,7 @@ public class SimpleSecondarySSBean extends BaseSSBean implements SimpleSecondary
 
 	@PermitAll
 	public ContextDataType replyWithSetRollbackOnly() {
-		ContextDataType result = getContextData(sessionContext, SimpleSecondarySSBean.class, "replyWithSetRollbackOnly");
+		ContextDataType result = getContextData(sessionContext, "replyWithSetRollbackOnly");
 		
 		try {
 			sessionContext.getUserTransaction().setRollbackOnly();

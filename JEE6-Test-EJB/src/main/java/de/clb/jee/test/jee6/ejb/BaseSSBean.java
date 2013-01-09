@@ -11,7 +11,7 @@ import de.clb.jee.test.util.ContextDataType;
  */
 public class BaseSSBean {
 
-	protected ContextDataType getContextData(SessionContext ctx, Class<?> clazzName, String operationName) {
+	protected ContextDataType getContextData(SessionContext ctx, String operationName) {
 		ContextDataType result = new ContextDataType();
 
 		result.setCallTime(System.currentTimeMillis());
@@ -22,7 +22,7 @@ public class BaseSSBean {
 		} else {
 			result.setHasTransaction(false);
 		}
-		result.setEJBName(clazzName.getName());
+		result.setEJBName(this.getClass().getName());
 		result.setOperation(operationName);
 		return result;
 
