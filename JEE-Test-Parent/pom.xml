@@ -29,7 +29,7 @@
 -->
 
 		<!-- Maven Plugin Versions -->
-		<version.maven-ear-plugin>2.7</version.maven-ear-plugin>
+		<version.maven-ear-plugin>2.8</version.maven-ear-plugin>
 
     </properties>
 

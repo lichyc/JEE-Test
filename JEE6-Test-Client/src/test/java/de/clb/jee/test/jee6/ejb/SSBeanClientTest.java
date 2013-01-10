@@ -49,12 +49,15 @@ public class SSBeanClientTest {
 		// p.put("remote.connection.default.connect.options.org.xnio.Options.SSL_STARTTLS",
 		// "true");
 
-		// p.put("remote.connection.default.username", "username");
-		// p.put("remote.connection.default.password", "password");
+//		 p.put("remote.connection.default.username", "test1");
+//		 p.put("remote.connection.default.password", "test1");
 
 		p.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
 		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		p.put("jboss.naming.client.ejb.context", "true");
+		
+		p.put(Context.SECURITY_PRINCIPAL, "test1");
+		p.put(Context.SECURITY_CREDENTIALS, "test1");
 
 		// Initializes a result set.
 		final List<EJBCallResult> results = new ArrayList<EJBCallResult>();

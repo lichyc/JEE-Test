@@ -169,7 +169,7 @@ public class PropertiesManager {
 				}
 
 				File[] files = dir.listFiles();
-				log.info("processing dir: " + url);
+//				log.info("processing dir: " + url);
 				for (File file : files) {
 					log.finest("processing file system resource: " + file.getName());
 					if (file.isDirectory()) {
@@ -225,7 +225,7 @@ public class PropertiesManager {
 						if(packageName.endsWith("/")) {
 							finalResourceName = url.replace(dir.getPath(), packageName);
 						} else {
-							finalResourceName = url.replace(dir.getPath(), packageName+"/");
+							finalResourceName = url.replace(dir.getPath(), packageName.replace(".", "/")+"/");
 						}
 						log.info("Final Resource Name: " + finalResourceName);
 						urlList.add(finalResourceName);
@@ -249,10 +249,10 @@ public class PropertiesManager {
 		for (int i = 0; i < urls.length; i++) {
 			InputStream is = classLoader.getResourceAsStream(urls[i]);
 			if (null != is) {
-				log.info("SUCCESS !!!!  System-Classloader: "
-						+ classLoader.toString());
-				log.info("SUCCESS !!!!  PropertiesLoader: "
-						+ is.toString());
+//				log.info("SUCCESS !!!!  System-Classloader: "
+//						+ classLoader.toString());
+//				log.info("SUCCESS !!!!  PropertiesLoader: "
+//						+ is.toString());
 				Properties props = new Properties();
 				try {
 					props.load(is);

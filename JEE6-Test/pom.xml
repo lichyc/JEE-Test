@@ -30,6 +30,10 @@
 							<bundleFileName>JEE6-Test-EJB.jar</bundleFileName>
 						</ejbModule>
 					</modules>
+					<jboss>	
+						<version>5</version>
+						<security-domain>JEE-Test-Realm</security-domain>
+					</jboss>
 				</configuration>
 			</plugin>
 		</plugins>

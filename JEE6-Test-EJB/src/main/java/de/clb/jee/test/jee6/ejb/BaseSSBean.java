@@ -5,6 +5,7 @@ import javax.transaction.Status;
 import javax.transaction.TransactionSynchronizationRegistry;
 
 import de.clb.jee.test.util.ContextDataType;
+import de.clb.jee.test.util.PropertiesManager;
 
 /**
  * 
