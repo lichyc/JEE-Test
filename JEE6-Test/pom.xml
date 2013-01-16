@@ -29,6 +29,10 @@
 							<artifactId>JEE6-Test-EJB</artifactId>
 							<bundleFileName>JEE6-Test-EJB.jar</bundleFileName>
 						</ejbModule>
+						<!-- webModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>JEE6-Test-Web</artifactId>
+						</webModule -->
 					</modules>
 					<jboss>	
 						<version>5</version>
@@ -72,5 +76,11 @@
 			<version>${project.version}</version>
 			<type>ejb</type>
 		</dependency>
+		<!-- dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>JEE6-Test-Web</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency -->
 	</dependencies>
 </project>

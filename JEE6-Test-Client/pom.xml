@@ -36,7 +36,7 @@
 			<groupId>org.jboss.as</groupId>
 			<artifactId>jboss-as-ejb-client-bom</artifactId>
 			<type>pom</type>
-			<version>7.1.2.Final</version>
+			<version>${version.jboss-as-ejb-client-bom}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.osgi.vfs</groupId>

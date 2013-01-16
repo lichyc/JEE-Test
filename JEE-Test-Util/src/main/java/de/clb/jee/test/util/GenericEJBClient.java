@@ -39,9 +39,16 @@ public class GenericEJBClient {
     public static Object lookupRemoteStatelessSSB31(String appName, String moduleName, String distinctName, String beanName, String viewClassName) throws NamingException {
         final Hashtable<String,String> jndiProperties = new Hashtable<String,String>();
         jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
+        jndiProperties.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
+        jndiProperties.put("jboss.naming.client.ejb.context", "true");
         final Context context = new InitialContext(jndiProperties);
         // let's do the lookup
-        return context.lookup("ejb:" + appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + viewClassName);
+        if (null != distinctName) {
+        	return context.lookup(appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + viewClassName);
+        } else {
+        	return context.lookup(appName + "/" + moduleName + "/" + beanName + "!" + viewClassName);
+        }
     }
     
     /**
@@ -92,7 +99,11 @@ public class GenericEJBClient {
         	
         final Context context = new InitialContext(jndiProperties);
         // let's do the lookup
-        return context.lookup("ejb:" + appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + viewClassName);
+        if (null != distinctName) {
+        	return context.lookup(appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + viewClassName);
+        } else {
+        	return context.lookup(appName + "/" + moduleName + "/" + beanName + "!" + viewClassName);
+        }
     }
 
 }

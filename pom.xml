@@ -11,6 +11,7 @@
 		<module>JEE-Test-Parent</module>
 		<module>JEE-Test-Util</module>
 		<module>JEE6-Test-EJB</module>
+		<!-- module>JEE6-Test-Web</module -->
 		<module>JEE6-Test</module>
 		<!-- module>JEE6-Test-Client</module -->
 	</modules>

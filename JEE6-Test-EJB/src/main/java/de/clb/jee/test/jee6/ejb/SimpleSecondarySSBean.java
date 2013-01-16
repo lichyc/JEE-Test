@@ -90,7 +90,7 @@ public class SimpleSecondarySSBean extends BaseSSBean implements SimpleSecondary
 	}
 
 	@PermitAll
-	@TransactionAttribute(TransactionAttributeType.MANDATORY)
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public ContextDataType replyWithSetRollbackOnly() {
 		ContextDataType result = getContextData(sessionContext, txReg, "replyWithSetRollbackOnly");
 		

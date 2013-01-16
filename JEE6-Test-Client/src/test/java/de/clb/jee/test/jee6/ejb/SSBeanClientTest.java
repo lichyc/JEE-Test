@@ -1,9 +1,12 @@
 package de.clb.jee.test.jee6.ejb;
 
+import static org.junit.Assert.*;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -11,9 +14,12 @@ import javax.naming.NamingException;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.junit.Before;
 import org.junit.Test;
 
 import de.clb.jee.test.util.CallSequenceType;
+import de.clb.jee.test.util.ContextDataType;
+import de.clb.jee.test.util.XmlFormater;
 
 /**
  * This class calls all methods of all listed EJB 3.1.
@@ -27,6 +33,90 @@ public class SSBeanClientTest {
 	 * True if the tests should be interrupted after the first exception occurring.
 	 */
 	protected boolean stopsAfterFirstException = false;
+	
+	private static final Logger log = Logger.getLogger("SSBeanClientTest");
+	
+	SimplePrimarySSBeanRemote primarySSB = null;
+	
+	Properties contextProps = null;
+	
+	XmlFormater xmlFormater = new XmlFormater();
+	
+	private static final String USER = "clichybi";
+	
+	@Before
+	public void setUp() throws Exception {
+		contextProps = new Properties();
+		contextProps.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		contextProps.put(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
+		contextProps.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
+		contextProps.put("jboss.naming.client.ejb.context", true);
+		
+		contextProps.put(Context.SECURITY_PRINCIPAL, USER);
+		contextProps.put(Context.SECURITY_CREDENTIALS, "redhat");
+		
+//		contextProps.put(Context.SECURITY_PRINCIPAL, "test1");
+//		contextProps.put(Context.SECURITY_CREDENTIALS, "test1");
+//		
+//		contextProps.put(org.xnio.Options.SSL_ENABLED, "false");
+//		contextProps.put(org.xnio.Options.SASL_POLICY_NOANONYMOUS, "false");
+//		contextProps.put(org.xnio.Options.SASL_DISALLOWED_MECHANISMS,"JBOSS-LOCAL-USER");
+//		contextProps.put(org.xnio.Options.SASL_POLICY_PASS_CREDENTIALS, "true");
+		
+		
+//		primarySSB = (SimplePrimarySSBeanRemote)  InitialContext.doLookup("JEE6-Test/JEE6-Test-EJB/SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote"); 
+		
+		primarySSB = (SimplePrimarySSBeanRemote)   new InitialContext(contextProps).lookup("JEE6-Test/JEE6-Test-EJB/SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
+		log.info("EJB Remoteinterface instanciated");
+	}
+	
+	@Test
+	public void connectTest() throws Exception {
+		
+		log.info("Before EJB Call");
+		ContextDataType response = primarySSB.simpleReply();
+	
+		assertNotNull(response);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response));
+		
+		assertNull(response.getException());
+		
+		assertEquals("Expected Caller", USER, response.getCaller());
+	}
+	
+	@Test
+	public void connectSecuredOperationTest() throws Exception {
+		
+		log.info("Before EJB Call");
+		ContextDataType response = primarySSB.simpleSecuredReply();
+		
+		assertNotNull(response);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response));
+		
+		assertNull(response.getException());
+		
+		assertEquals("Expected Caller", USER, response.getCaller());
+		
+	}
+	
+	@Test
+	public void delegatSecuredOperationTest() throws Exception {
+		
+		log.info("Before EJB Call");
+		CallSequenceType response = primarySSB.delegate2SecuredRemoteReply();
+		
+		assertNotNull(response);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response));
+		
+		assertEquals(0, response.getException().size());
+		
+		assertNotNull(response.getContextDataElement());
+		
+		assertNotNull(response.getContextDataElement().get(0));
+		
+		assertEquals("Expected Caller", USER, response.getContextDataElement().get(0).getCaller());
+	
+	}
 
 	@Test
 	public void callSimplePrimarySSB() {
@@ -115,7 +205,8 @@ public class SSBeanClientTest {
 	 * @throws NamingException
 	 */
 	public static Object lookupRemoteStatelessSSB31(Properties properties, String name) throws NamingException {
-		return new InitialContext(properties).lookup(name);
+		return InitialContext.doLookup(name);
+//		return new InitialContext(properties).lookup(name);
 	}
 
 }

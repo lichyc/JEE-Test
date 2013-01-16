@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -18,7 +19,6 @@ import de.clb.jee.test.util.CallSequenceType;
 import de.clb.jee.test.util.ContextDataType;
 import de.clb.jee.test.util.GenericEJBClient;
 
-//@SecurityDomain("mySecurityDomain")
 @DeclareRoles({"guestRole", "userRole", "adminRole"})
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class SimplePrimarySSBean extends BaseSSBean implements SimplePrimarySSBeanRemote{
@@ -31,6 +31,9 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	
 	@Resource
 	TransactionSynchronizationRegistry txReg;
+	
+	@EJB
+	SimpleSecondarySSBeanRemote secondBean;
 
 	@PermitAll
 	public ContextDataType simpleReply() {
@@ -49,8 +52,8 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		CallSequenceType result = new CallSequenceType();
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "simpleDelegate"));
 		try {
-			//ejb:JEE6-Test/JEE6-Test-EJB//SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote
-			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
+			//ejb:JEE6-Test/JEE6-Test-EJB/SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote
+			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleReply());
@@ -68,7 +71,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "simpleSecuredDelegate"));
 		
 		try {
-			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
+			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());
@@ -86,7 +89,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2SecondaryReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleReply());
@@ -103,7 +106,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2SecuredSecondaryReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());
@@ -115,7 +118,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	}
 
 	@PermitAll
-	@TransactionAttribute(TransactionAttributeType.MANDATORY)
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public ContextDataType replyWithSetRollbackOnly() {
 		ContextDataType result = getContextData(sessionContext, txReg, "replyWithSetRollbackOnly");
 		
@@ -138,7 +141,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2RemoteReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleReply());
@@ -156,7 +159,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2SecuredRemoteReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", "", "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());

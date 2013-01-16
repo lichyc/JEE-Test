@@ -44,6 +44,12 @@
 	</build>
 
 	<dependencies>
+	    <dependency>
+			<groupId>org.jboss.as</groupId>
+			<artifactId>jboss-as-ejb-client-bom</artifactId>
+			<type>pom</type>
+			<version>${version.jboss-as-ejb-client-bom}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.jboss.osgi.vfs</groupId>
 			<artifactId>jbosgi-vfs30</artifactId>
