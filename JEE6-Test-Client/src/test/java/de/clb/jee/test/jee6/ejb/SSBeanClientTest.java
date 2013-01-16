@@ -118,7 +118,7 @@ public class SSBeanClientTest {
 	
 	}
 
-	@Test
+//	@Test
 	public void callSimplePrimarySSB() {
 
 		Properties p = new Properties();
