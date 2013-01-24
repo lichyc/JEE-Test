@@ -7,9 +7,11 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 
 /**
  * @author clichybi
@@ -43,7 +45,8 @@ public class XmlFormater {
 
     public void marshal(ContextDataType obj, OutputStream os) throws Exception {
         try {
-            contextDataTypeMarshaller.marshal(obj, os);
+            contextDataTypeMarshaller.marshal(new JAXBElement<ContextDataType>(new QName("uri","local"), ContextDataType.class, obj), os);
+            
         } catch (JAXBException jaxbe) {
             throw new Exception(jaxbe);
         }
@@ -52,7 +55,7 @@ public class XmlFormater {
     public String marshalToString(ContextDataType obj) throws Exception {
         try {
             StringWriter sw = new StringWriter();
-            contextDataTypeMarshaller.marshal(obj, sw);
+            contextDataTypeMarshaller.marshal(new JAXBElement<ContextDataType>(new QName("uri","local"), ContextDataType.class, obj), sw);
             return sw.toString();
         } catch (JAXBException jaxbe) {
             throw new Exception(jaxbe);
@@ -61,7 +64,7 @@ public class XmlFormater {
     
     public void marshal(CallSequenceType obj, OutputStream os) throws Exception {
         try {
-            callSequenceTypeMarshaller.marshal(obj, os);
+            callSequenceTypeMarshaller.marshal(new JAXBElement<CallSequenceType>(new QName("uri","local"), CallSequenceType.class, obj), os);
         } catch (JAXBException jaxbe) {
             throw new Exception(jaxbe);
         }
@@ -70,7 +73,7 @@ public class XmlFormater {
     public String marshalToString(CallSequenceType obj) throws Exception {
         try {
             StringWriter sw = new StringWriter();
-            callSequenceTypeMarshaller.marshal(obj, sw);
+            callSequenceTypeMarshaller.marshal(new JAXBElement<CallSequenceType>(new QName("uri","local"), CallSequenceType.class, obj), sw);      
             return sw.toString();
         } catch (JAXBException jaxbe) {
             throw new Exception(jaxbe);

@@ -33,7 +33,11 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 	TransactionSynchronizationRegistry txReg;
 	
 	@EJB
+	SimplePrimarySSBeanRemote primaryBean;
+	
+	@EJB
 	SimpleSecondarySSBeanRemote secondBean;
+
 
 	@PermitAll
 	public ContextDataType simpleReply() {
@@ -52,12 +56,10 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		CallSequenceType result = new CallSequenceType();
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "simpleDelegate"));
 		try {
-			//ejb:JEE6-Test/JEE6-Test-EJB/SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote
-			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
-			subResult.getContextDataElement().add(remoteInterface.simpleReply());
-		} catch (NamingException e) {
+			subResult.getContextDataElement().add(primaryBean.simpleReply());
+		} catch (Exception e) {
 			result.getException().add(e.getMessage());
 			e.printStackTrace();
 		}	
@@ -71,11 +73,10 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "simpleSecuredDelegate"));
 		
 		try {
-			SimplePrimarySSBeanRemote remoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
-			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());
-		} catch (NamingException e) {
+			subResult.getContextDataElement().add(primaryBean.simpleSecuredReply());
+		} catch (Exception e) {
 			result.getException().add(e.getMessage());
 			e.printStackTrace();
 		}	
@@ -89,11 +90,12 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2SecondaryReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			//SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
-			subResult.getContextDataElement().add(remoteInterface.simpleReply());
-		} catch (NamingException e) {
+//			subResult.getContextDataElement().add(remoteInterface.simpleReply());
+			subResult.getContextDataElement().add(secondBean.simpleReply());
+		} catch (Exception e) {
 			result.getException().add(e.getMessage());
 			e.printStackTrace();
 		}	
@@ -106,11 +108,12 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2SecuredSecondaryReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+//			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31("JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
-			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());
-		} catch (NamingException e) {
+//			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());
+			subResult.getContextDataElement().add(secondBean.simpleReply());
+		} catch (Exception e) {
 			result.getException().add(e.getMessage());
 			e.printStackTrace();
 		}	
@@ -141,7 +144,7 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2RemoteReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test-Remote", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleReply());
@@ -159,11 +162,56 @@ public @Stateless class SimplePrimarySSBean extends BaseSSBean implements Simple
 		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2SecuredRemoteReply"));
 		
 		try {
-			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			SimpleSecondarySSBeanRemote remoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test-Remote", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
 			CallSequenceType subResult = new CallSequenceType();
 			result.getCallSequenceElement().add(subResult);
 			subResult.getContextDataElement().add(remoteInterface.simpleSecuredReply());
 		} catch (NamingException e) {
+			result.getException().add(e.getMessage());
+			e.printStackTrace();
+		}	
+		return result;
+	}
+	
+	@PermitAll
+	public CallSequenceType multipleCallLocal() {
+		CallSequenceType result = new CallSequenceType();
+		
+		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2RemoteReply"));
+	
+		try {		
+			CallSequenceType subResult = new CallSequenceType();
+			result.getCallSequenceElement().add(subResult);
+			subResult.getContextDataElement().add(primaryBean.simpleReply());
+			subResult.getContextDataElement().add(secondBean.simpleReply());
+			subResult.getCallSequenceElement().add(primaryBean.simpleDelegate());
+			subResult.getCallSequenceElement().add(secondBean.simpleDelegate());
+		} catch (Exception e) {
+			result.getException().add(e.getMessage());
+			e.printStackTrace();
+		}	
+		return result;
+	}
+	
+	@PermitAll
+	public CallSequenceType multipleCallRemote() {
+		CallSequenceType result = new CallSequenceType();
+		
+		result.getContextDataElement().add(getContextData(sessionContext, txReg, "delegate2RemoteReply"));
+	
+		try {
+			SimplePrimarySSBeanRemote primaryRemoteInterface = (SimplePrimarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test-Remote", "JEE6-Test-EJB", null, "SimplePrimarySSBean", "de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
+			SimpleSecondarySSBeanRemote secondaryRemoteInterface = (SimpleSecondarySSBeanRemote) GenericEJBClient.lookupRemoteStatelessSSB31(REMOTE_EAP6_SERVER_ID,"JEE6-Test-Remote", "JEE6-Test-EJB", null, "SimpleSecondarySSBean", "de.clb.jee.test.jee6.ejb.SimpleSecondarySSBeanRemote");
+			CallSequenceType subResult = new CallSequenceType();
+			result.getCallSequenceElement().add(subResult);
+			subResult.getContextDataElement().add(primaryBean.simpleReply());
+			subResult.getContextDataElement().add(secondBean.simpleReply());
+			subResult.getCallSequenceElement().add(primaryBean.multipleCallLocal());
+			subResult.getCallSequenceElement().add(secondBean.simpleDelegate());
+			subResult.getCallSequenceElement().add(primaryRemoteInterface.simpleDelegate());
+			subResult.getCallSequenceElement().add(secondaryRemoteInterface.simpleDelegate());
+			subResult.getCallSequenceElement().add(primaryRemoteInterface.multipleCallLocal());
+		} catch (Exception e) {
 			result.getException().add(e.getMessage());
 			e.printStackTrace();
 		}	

@@ -5,9 +5,9 @@
 		<groupId>de.clb.jee.test</groupId>
 		<artifactId>JEE-Test-Parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<!--<relativePath>../JEE-Test-Parent/.</relativePath>-->
+		<relativePath>../JEE-Test-Parent/.</relativePath>
 	</parent>
-	<artifactId>JEE6-Test</artifactId>
+	<artifactId>JEE6-Test-Remote</artifactId>
 
 	<packaging>ear</packaging>
 

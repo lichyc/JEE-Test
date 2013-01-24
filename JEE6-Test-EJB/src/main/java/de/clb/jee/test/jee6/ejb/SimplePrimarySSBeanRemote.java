@@ -25,5 +25,9 @@ public interface SimplePrimarySSBeanRemote {
 	public CallSequenceType delegate2RemoteReply();
 	
 	public CallSequenceType delegate2SecuredRemoteReply();
+	
+	public CallSequenceType multipleCallLocal();
+	
+	public CallSequenceType multipleCallRemote();
 
 }

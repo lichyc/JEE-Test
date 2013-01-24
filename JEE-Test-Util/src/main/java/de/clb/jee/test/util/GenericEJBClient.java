@@ -42,6 +42,12 @@ public class GenericEJBClient {
         jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
         jndiProperties.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
         jndiProperties.put("jboss.naming.client.ejb.context", "true");
+        
+        jndiProperties.put("jboss.naming.client.remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED","false");
+        jndiProperties.put("jboss.naming.client.connect.options.org.xnio.Options.SSL_STARTTLS","false");
+        jndiProperties.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT", "false");  
+        jndiProperties.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_DISALLOWED_MECHANISMS","JBOSS-LOCAL-USER");
+        
         final Context context = new InitialContext(jndiProperties);
         // let's do the lookup
         if (null != distinctName) {
@@ -82,12 +88,18 @@ public class GenericEJBClient {
         String securityCredential = pm.getProperty("remote.connection."+serverId+".security.credential");
         
         jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+//        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
+        jndiProperties.put("jboss.naming.client.ejb.context", "true");
         
-        if (null != providerURL) {
-        	jndiProperties.put(Context.PROVIDER_URL, providerURL);
-        	log.info("PROVIDER_URL is use: " + providerURL);
-        }
+//        jndiProperties.put("jboss.naming.client.remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED","false");
+//        jndiProperties.put("jboss.naming.client.connect.options.org.xnio.Options.SSL_STARTTLS","false");
+//        jndiProperties.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT", "false");  
+//        jndiProperties.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_DISALLOWED_MECHANISMS","JBOSS-LOCAL-USER");
+        
+//        if (null != providerURL) {
+//        	jndiProperties.put(Context.PROVIDER_URL, providerURL);
+//        	log.info("PROVIDER_URL is use: " + providerURL);
+//        }
         if (null != securityPrincipal) {
         	jndiProperties.put(Context.SECURITY_PRINCIPAL, securityPrincipal);
         	log.info("SECURITY_PRINCIPAL is use: " + securityPrincipal);
@@ -100,9 +112,9 @@ public class GenericEJBClient {
         final Context context = new InitialContext(jndiProperties);
         // let's do the lookup
         if (null != distinctName) {
-        	return context.lookup(appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + viewClassName);
+        	return context.lookup("ejb:"+appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "!" + viewClassName);
         } else {
-        	return context.lookup(appName + "/" + moduleName + "/" + beanName + "!" + viewClassName);
+        	return context.lookup("ejb:"+appName + "/" + moduleName + "//" + beanName + "!" + viewClassName);
         }
     }
 

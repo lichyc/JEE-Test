@@ -1,5 +1,7 @@
 package de.clb.jee.test.jee6.ejb;
 
+import java.net.UnknownHostException;
+
 import javax.ejb.SessionContext;
 import javax.transaction.Status;
 import javax.transaction.TransactionSynchronizationRegistry;
@@ -16,6 +18,18 @@ public class BaseSSBean {
 
 	protected ContextDataType getContextData(SessionContext ctx,TransactionSynchronizationRegistry txReg, String operationName) {
 		ContextDataType result = new ContextDataType();
+		
+		String hostname = "unknown";
+		
+		try {
+			hostname = java.net.InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			try {
+				hostname = java.net.InetAddress.getLocalHost().getHostAddress();
+			} catch (UnknownHostException e1) {
+				
+			}
+		}
 
 		result.setCallTime(System.currentTimeMillis());
 		result.setCaller(ctx.getCallerPrincipal().getName());
@@ -28,6 +42,7 @@ public class BaseSSBean {
 		result.setTransactionStatus(txReg.getTransactionStatus());
 		result.setEJBName(this.getClass().getName());
 		result.setOperation(operationName);
+		result.setHostname(hostname);
 		return result;
 
 	}

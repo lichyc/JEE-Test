@@ -57,8 +57,14 @@
             </security-realm>
             <security-realm name="JEE-Test-Realm">
                 <authentication>
+                    <local default-user="$anonymous" allowed-users="*"/>
                     <jaas name="JEE-Test-Domain"/>
                 </authentication>
+            </security-realm>
+            <security-realm name="ejb-security-realm">
+                <server-identities>
+                    <secret value="cmVkaGF0"/>
+                </server-identities>
             </security-realm>
         </security-realms>
         <management-interfaces>
@@ -137,7 +143,7 @@
                     </xa-pool>
                     <security>
                         <user-name>jboss_eap</user-name>
-                        <password>VAULT::DS-GPS-COLLAB::jboss_eap::YzYwMTJjZGUtOGFhZi00NDVkLWI0ZGItZGJmODU5NWE1MTMyTElORV9CUkVBS3ZhdWx0</password>
+                        <password>VAULT::DS-GPS-COLLAB::jboss_eap::MTVlZjU1ZWItZjA1ZS00YTI3LWEyNmQtNWYwN2M5ZjYzZTY3TElORV9CUkVBS3ZhdWx0</password>
                     </security>
                     <validation>
                         <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"/>
@@ -274,7 +280,15 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:pojo:1.0"/>
         <subsystem xmlns="urn:jboss:domain:remoting:1.1">
-            <connector name="remoting-connector" socket-binding="remoting" security-realm="ApplicationRealm"/>
+            <connector name="remoting-connector" socket-binding="remoting" security-realm="JEE-Test-Realm"/>
+            <outbound-connections>
+                <remote-outbound-connection name="remote-ejb-connection-gpsc-eap6" outbound-socket-binding-ref="remote-ejb-gpsc-eap6" username="ejbUser" security-realm="ejb-security-realm">
+                    <properties>
+                        <property name="SASL_POLICY_NOANONYMOUS" value="false"/>
+                        <property name="SSL_ENABLED" value="false"/>
+                    </properties>
+                </remote-outbound-connection>
+            </outbound-connections>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:1.0"/>
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
@@ -306,17 +320,19 @@
                             <module-option name="password-stacking" value="useFirstPass"/>
                         </login-module>
                         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required">
-                            <module-option name="defaultUsersProperties" value="${jboss.server.config.dir}/application-users.properties"/>
-                            <module-option name="defaultRolesProperties" value="${jboss.server.config.dir}/application-roles.properties"/>
-                            <module-option name="usersProperties" value="${jboss.server.config.dir}/application-users.properties"/>
-                            <module-option name="rolesProperties" value="${jboss.server.config.dir}/application-roles.properties"/>
+                            <module-option name="unauthenticatedIdentity" value="anonymous"/>
+                            <module-option name="usersProperties" value="file://${jboss.server.config.dir}/application-users.properties"/>
+                            <module-option name="rolesProperties" value="file://${jboss.server.config.dir}/application-roles.properties"/>
                             <module-option name="password-stacking" value="useFirstPass"/>
                         </login-module>
                     </authentication>
                 </security-domain>
-                <security-domain name="JEE-Test-Realm1">
+                <security-domain name="JEE-Test-Domain-XX">
                     <authentication>
-                        <login-module code="org.jboss.security.auth.spi.LdapLoginModule" flag="required">
+                        <login-module code="Remoting" flag="optional">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                        <login-module code="Ldap" flag="required">
                             <module-option name="java.naming.factory.initial" value="com.sun.jndi.ldap.LdapCtxFactory"/>
                             <module-option name="java.naming.provider.url" value="ldap://ldap.coe.muc.redhat.com:389"/>
                             <module-option name="java.naming.security.authentication" value="simple"/>
@@ -327,13 +343,16 @@
                         </login-module>
                     </authentication>
                 </security-domain>
-                <security-domain name="JEE-Test-Realm2">
+                <security-domain name="JEE-Test-Domain-backup">
                     <authentication>
+                        <login-module code="Remoting" flag="optional">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
                         <login-module code="org.jboss.security.auth.spi.LdapExtLoginModule" flag="required">
                             <module-option name="java.naming.provider.url" value="ldap://ldap.coe.muc.redhat.com:389/"/>
                             <module-option name="java.naming.security.authentication" value="simple"/>
-                            <module-option name="bindDN" value="uid=test1,ou=People,dc=redhat,dc=com"/>
-                            <module-option name="bindCredential" value="test1"/>
+                            <module-option name="bindDN" value="uid=root,ou=People,dc=redhat,dc=com"/>
+                            <module-option name="bindCredential" value="redhat"/>
                             <module-option name="baseCtxDN" value="ou=People,dc=redhat,dc=com"/>
                             <module-option name="baseFilter" value="(cn={0})"/>
                             <module-option name="rolesCtxDN" value="ou=Groups,dc=redhat,dc=com"/>
@@ -403,6 +422,9 @@
         <socket-binding name="txn-status-manager" port="4713"/>
         <outbound-socket-binding name="mail-smtp">
             <remote-destination host="localhost" port="25"/>
+        </outbound-socket-binding>
+        <outbound-socket-binding name="remote-ejb-gpsc-eap6">
+            <remote-destination host="gpsc-eap6-cluster.coe.muc.redhat.com" port="4447"/>
         </outbound-socket-binding>
     </socket-binding-group>
 

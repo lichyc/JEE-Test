@@ -21,6 +21,7 @@
 						<goals>
 							<goal>generate</goal>
 						</goals>
+						<phase>generate-sources</phase>
 					</execution>
 				</executions>
 				<configuration>

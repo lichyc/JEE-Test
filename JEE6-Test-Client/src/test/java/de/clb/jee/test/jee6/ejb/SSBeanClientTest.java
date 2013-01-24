@@ -42,7 +42,13 @@ public class SSBeanClientTest {
 	
 	XmlFormater xmlFormater = new XmlFormater();
 	
-	private static final String USER = "clichybi";
+//	private static final String USER = "clichybi";
+//	private static final String PASSWORD =  "redhat";
+//	private static final String PASSWORD =  "306fcb7b465f6a6018a20a187e9d766c";
+	private static final String USER = "test01";
+	private static final String PASSWORD =  "785a26aa9cd5ec07d98709dbf1261974";
+
+	
 	
 	@Before
 	public void setUp() throws Exception {
@@ -50,19 +56,29 @@ public class SSBeanClientTest {
 		contextProps.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		contextProps.put(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
 		contextProps.put(Context.PROVIDER_URL, "remote://127.0.0.1:4447");
+//		contextProps.put(Context.PROVIDER_URL, "remote://10.32.69.198:4447");
 		contextProps.put("jboss.naming.client.ejb.context", true);
 		
 		contextProps.put(Context.SECURITY_PRINCIPAL, USER);
-		contextProps.put(Context.SECURITY_CREDENTIALS, "redhat");
+		contextProps.put(Context.SECURITY_CREDENTIALS, PASSWORD);
 		
-//		contextProps.put(Context.SECURITY_PRINCIPAL, "test1");
-//		contextProps.put(Context.SECURITY_CREDENTIALS, "test1");
-//		
+		
+		contextProps.put("jboss.naming.client.remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED","false");
+		contextProps.put("jboss.naming.client.connect.options.org.xnio.Options.SSL_STARTTLS","false");
+    	contextProps.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT", "false");
+//    	contextProps.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_MECHANISMS", "PLAIN SASL");       
+		contextProps.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_DISALLOWED_MECHANISMS","JBOSS-LOCAL-USER");
+
+// settings without influence, because we use: contextProps.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 //		contextProps.put(org.xnio.Options.SSL_ENABLED, "false");
 //		contextProps.put(org.xnio.Options.SASL_POLICY_NOANONYMOUS, "false");
 //		contextProps.put(org.xnio.Options.SASL_DISALLOWED_MECHANISMS,"JBOSS-LOCAL-USER");
 //		contextProps.put(org.xnio.Options.SASL_POLICY_PASS_CREDENTIALS, "true");
+//		contextProps.put(org.xnio.Options.SASL_POLICY_NOPLAINTEXT, "false");
+//		contextProps.put(org.xnio.Options.SASL_MECHANISMS, "PLAIN,DIGEST-MD5");
+//		contextProps.put(org.xnio.Options.SECURE, false);
 		
+			
 		
 //		primarySSB = (SimplePrimarySSBeanRemote)  InitialContext.doLookup("JEE6-Test/JEE6-Test-EJB/SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote"); 
 		
@@ -73,6 +89,10 @@ public class SSBeanClientTest {
 	@Test
 	public void connectTest() throws Exception {
 		
+		String clearTextPassword=USER+":"+"JEE-Test-Realm"+":"+PASSWORD;
+		
+		log.info(org.jboss.crypto.CryptoUtil.createPasswordHash("MD5", "hex", null, null, clearTextPassword));
+		
 		log.info("Before EJB Call");
 		ContextDataType response = primarySSB.simpleReply();
 	
@@ -82,6 +102,7 @@ public class SSBeanClientTest {
 		assertNull(response.getException());
 		
 		assertEquals("Expected Caller", USER, response.getCaller());
+	
 	}
 	
 	@Test
@@ -100,7 +121,79 @@ public class SSBeanClientTest {
 	}
 	
 	@Test
-	public void delegatSecuredOperationTest() throws Exception {
+	public void delegate2SecuredSecondaryReplyTest() throws Exception {
+		
+		log.info("Before EJB Call");
+		CallSequenceType response = primarySSB.delegate2SecuredSecondaryReply();
+		
+		assertNotNull(response);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response));
+		
+		assertEquals(0, response.getException().size());
+		
+		assertNotNull(response.getContextDataElement());
+		
+		assertNotNull(response.getContextDataElement().get(0));
+		
+		assertEquals("Expected Caller", USER, response.getContextDataElement().get(0).getCaller());
+	
+	}
+	
+	private void check2dnServerAvailable()  throws Exception {
+		log.info("Check 2nd server available");
+		Properties contextProps2 = new Properties();
+		
+		contextProps2.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		contextProps2.put(Context.INITIAL_CONTEXT_FACTORY, org.jboss.naming.remote.client.InitialContextFactory.class.getName());
+		contextProps2.put(Context.PROVIDER_URL, "remote://gpsc-eap6-cluster.coe.muc.redhat.com:4447");
+		contextProps2.put("jboss.naming.client.ejb.context", false);	
+		contextProps2.put(Context.SECURITY_PRINCIPAL, USER);
+		contextProps2.put(Context.SECURITY_CREDENTIALS, PASSWORD);		
+		contextProps2.put("jboss.naming.client.remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED","false");
+		contextProps2.put("jboss.naming.client.connect.options.org.xnio.Options.SSL_STARTTLS","false");
+    	contextProps2.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT", "false");      
+		contextProps2.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_DISALLOWED_MECHANISMS","JBOSS-LOCAL-USER");
+	
+		SimplePrimarySSBeanRemote primarySSB2 = (SimplePrimarySSBeanRemote)   new InitialContext(contextProps2).lookup("JEE6-Test-Remote/JEE6-Test-EJB/SimplePrimarySSBean!de.clb.jee.test.jee6.ejb.SimplePrimarySSBeanRemote");
+		log.info("EJB Remoteinterface instanciated");
+		ContextDataType response2 = primarySSB2.simpleReply();
+		
+		assertNotNull(response2);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response2));
+		
+		assertNull(response2.getException());
+		
+		assertEquals("Expected Caller", USER, response2.getCaller());
+		
+		log.info("2nd Server up and running! -> Start real test");
+	}
+	
+	@Test
+	public void delegate2RemoteReplyTest() throws Exception {
+		
+//		check2dnServerAvailable();
+		
+		log.info("Before EJB Call");
+		CallSequenceType response = primarySSB.delegate2RemoteReply();
+		
+		assertNotNull(response);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response));
+		
+		assertEquals(0, response.getException().size());
+		
+		assertNotNull(response.getContextDataElement());
+		
+		assertNotNull(response.getContextDataElement().get(0));
+		
+		assertEquals("Expected Caller", USER, response.getContextDataElement().get(0).getCaller());
+	
+	}
+
+	
+	@Test
+	public void delegate2SecuredRemoteReplyTest() throws Exception {
+		
+//		check2dnServerAvailable();
 		
 		log.info("Before EJB Call");
 		CallSequenceType response = primarySSB.delegate2SecuredRemoteReply();
@@ -117,7 +210,50 @@ public class SSBeanClientTest {
 		assertEquals("Expected Caller", USER, response.getContextDataElement().get(0).getCaller());
 	
 	}
-
+	
+	@Test
+	public void multipleCallLocalTest() throws Exception {
+		
+//		check2dnServerAvailable();
+		
+		log.info("Before EJB Call");
+		CallSequenceType response = primarySSB.multipleCallLocal();
+		
+		assertNotNull(response);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response));
+		
+		assertEquals(0, response.getException().size());
+		
+		assertNotNull(response.getContextDataElement());
+		
+		assertNotNull(response.getContextDataElement().get(0));
+		
+		assertEquals("Expected Caller", USER, response.getContextDataElement().get(0).getCaller());
+	
+	}
+	
+	@Test
+	public void multipleCallRemoteTest() throws Exception {
+		
+//		check2dnServerAvailable();
+		
+		log.info("Before EJB Call");
+		CallSequenceType response = primarySSB.multipleCallRemote();
+		
+		assertNotNull(response);
+		log.info("EJB Response: "+xmlFormater.marshalToString(response));
+		
+		assertEquals(0, response.getException().size());
+		
+		assertNotNull(response.getContextDataElement());
+		
+		assertNotNull(response.getContextDataElement().get(0));
+		
+		assertEquals("Expected Caller", USER, response.getContextDataElement().get(0).getCaller());
+	
+	}
+	
+	
 //	@Test
 	public void callSimplePrimarySSB() {
 
